@@ -52,4 +52,48 @@ public class CardServiceImpl implements CardService {
 	}
 
 
+	@Transactional(readOnly = false)
+	@Override
+	public void addInCard(CardDto carddto) {
+		Optional<Product> product = productRepository.findById(carddto.getProduct_id());
+		Card card = modelMapper.map(carddto, Card.class);
+		if(product.isPresent() && !product.get().isAddedToCard()) {
+			product.get().setAddedToCard(true);
+			card.setProduct(product.get());
+		} else {
+			throw new RuntimeException("product not fount in DB");
+		}
+		cardRepository.save(card);
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public void UpdatetoCard(CardDto carddto) {
+		Optional<Product> product = productRepository.findById(carddto.getProduct_id());
+		Optional<Card> card = cardRepository.findById(carddto.getId());
+		if(product.isPresent() && product.get().isAddedToCard() && card.isPresent()) {
+			Card cardVal = card.get();
+			Product productVal = product.get();
+			cardVal.setPrice(productVal.getPrice() * carddto.getQuantity());
+			cardVal.setQuantity(carddto.getQuantity());
+		} else {
+			throw new RuntimeException("product not fount in DB");
+		}
+		cardRepository.save(card.get());
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public void DeleteInCard(CardDto carddto) {
+		Optional<Card> card = cardRepository.findById(carddto.getId());
+		if(card.isPresent()) {
+			Product product = card.get().getProduct();
+			product.setAddedToCard(false);
+			cardRepository.delete(card.get());
+			productRepository.save(product);
+		} else {
+			throw new RuntimeException("product not fount in DB");
+		}
+	}
+
 }
