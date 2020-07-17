@@ -1,6 +1,7 @@
 package com.productcatalogue.Card.Model;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,19 +23,26 @@ public class Product {
 	private Long id;
 
 	@Basic(optional = false)
+	@Column(name = "name")
 	private String name;
 
+	@Column(name = "price")
 	private Double price;
 
 	@Lob
+	@Column(name = "image")
 	private String image;
 
+	@Column(name = "size")
 	private int size;
 
+	@Column(name = "color")
 	private String color;
 
+	@Column(name = "brand")
 	private String brand;
 
+	@Column(name = "addedToCard")
 	private boolean addedToCard;
 
 }

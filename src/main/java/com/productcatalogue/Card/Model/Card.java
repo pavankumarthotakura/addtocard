@@ -22,8 +22,10 @@ public class Card {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(name = "quantity")
 	private int quantity;
 
+	@Column(name = "price")
 	private Double price;
 
 	@Column(name = "name")
